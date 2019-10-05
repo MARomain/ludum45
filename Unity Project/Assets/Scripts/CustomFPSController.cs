@@ -8,6 +8,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
     [RequireComponent(typeof (CapsuleCollider))]
     public class CustomFPSController : MonoBehaviour
     {
+        public float groundedDrag = 5f;
+        public float airborneDrag = 0f;
+
         [Serializable]
         public class MovementSettings
         {
@@ -17,6 +20,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             public float RunMultiplier = 2.0f;   // Speed when sprinting
 	        public KeyCode RunKey = KeyCode.LeftShift;
             public float JumpForce = 30f;
+            public float groundedDrag = 5f;
+            public float airborneDrag = 0f;
             public AnimationCurve SlopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
             [HideInInspector] public float CurrentTargetSpeed = 8f;
 
@@ -49,6 +54,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [Serializable]
         public class AdvancedSettings
         {
+
             public float groundCheckDistance = 0.01f; // distance for checking if the controller is grounded ( 0.01f seems to work best for this )
             public float stickToGroundHelperDistance = 0.5f; // stops the character
             public float slowDownRate = 20f; // rate at which the controller comes to a stop when there is no input
@@ -132,11 +138,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             if (m_IsGrounded)
             {
-                m_RigidBody.drag = 0f;
+                m_RigidBody.drag = groundedDrag;
 
                 if (m_Jump)
                 {
-                    m_RigidBody.drag = 0f;
+                    m_RigidBody.drag = airborneDrag;
                     m_RigidBody.velocity = new Vector3(m_RigidBody.velocity.x, 0f, m_RigidBody.velocity.z);
                     m_RigidBody.AddForce(new Vector3(0f, movementSettings.JumpForce, 0f), ForceMode.Impulse);
                     m_Jumping = true;
@@ -149,7 +155,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             else
             {
-                m_RigidBody.drag = 0f;
+                m_RigidBody.drag = airborneDrag;
                 if (m_PreviouslyGrounded && !m_Jumping)
                 {
                     StickToGroundHelper();
