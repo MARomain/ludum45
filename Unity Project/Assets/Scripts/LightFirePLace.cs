@@ -9,6 +9,7 @@ public class LightFirePLace : MonoBehaviour
     public GameObject fire;
     public GameManager gameManager;
     public bool lit;
+    public AudioSource fireSFX;
     // Start is called before the first frame update
     private void OnTriggerEnter(Collider other)
     {
@@ -16,6 +17,7 @@ public class LightFirePLace : MonoBehaviour
         {
             if(lit == false)
             {
+                fireSFX.Play();
                 gameManager.fireUp++;
                 lit = true;
             }

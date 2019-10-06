@@ -5,7 +5,8 @@ using UnityEngine;
 public class FlickeryLight : MonoBehaviour
 {
     public Light light;
-    public float multiplier = 2f;
+    public float speed = 2f;
+    public float multiplierKinda = 3f;
 
     private void Start()
     {
@@ -14,6 +15,6 @@ public class FlickeryLight : MonoBehaviour
 
     void Update()
     {
-        light.intensity = Mathf.Sin(Time.time *multiplier) +1.5f;
+        light.intensity = Mathf.Sin(Time.time *speed) + multiplierKinda;
     }
 }

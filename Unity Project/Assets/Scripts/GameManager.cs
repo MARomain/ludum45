@@ -15,6 +15,12 @@ public class GameManager : MonoBehaviour
     public Goal goal;
     public Transform startTransform;
     public Text timerText;
+    public AudioSource audioSource;
+    public AudioClip mainMusic;
+    public AudioClip winMusic;
+    public GameObject UIWin;
+    public GameObject UILose;
+    public GameObject StartUI;
     // Start is called before the first frame update
     void Start()
     {
@@ -66,10 +72,13 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("GamePlaying");
 
+        StartUI.SetActive(false);
         //EnableMovementInputs
 
         //Lancement du timer
         timerPlay = true;
+        audioSource.clip = mainMusic;
+        audioSource.Play();
 
         while (fireUp < goalNumber)
         {
@@ -89,23 +98,51 @@ public class GameManager : MonoBehaviour
         //si le joueur a gagné
         if (fireUp >= goalNumber)
         {
-            Debug.Log("YOU WON");
-            yield return null; // peut être l'amener dans une autre coroutine "ecran de fin"
 
-            //écran de fin "YOU WON IN X SECOND
-            //bouton "press here to restart"
-            //bouton "press here to close"
+            StartCoroutine(YouWonScreen());
+
+            yield return new WaitForSecondsRealtime(999999999999999999f);
+
         }
         else
         {
-            Debug.Log("Start over again");
-            yield return null; // a voir si y'a un certains nombre de try et après une défaite
-            
+            StartCoroutine(YouLoseScreen());
+            yield return new WaitForSecondsRealtime(999999999999999999f);
+
+
             //écran "You have to light all the fire in less then a minute
             //bouton "start over ?"
             //bouton "quit"
         }
 
+
+    }
+
+    private IEnumerator YouWonScreen()
+    {
+        Debug.Log("YOU WON");
+        audioSource.Stop();
+        audioSource.clip = winMusic;
+        audioSource.Play();
+        UIWin.SetActive(true);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        timerPlay = false;
+        yield return new WaitForSecondsRealtime(999999999999999999f);
+
+    }
+
+    private IEnumerator YouLoseScreen()
+    {
+        Debug.Log("Start over again");
+        audioSource.Stop();
+        UILose.SetActive(true);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        timerPlay = false;
+
+
+        yield return new WaitForSecondsRealtime(999999999999999999f);
     }
 
     public void ResetVariables()
@@ -116,6 +153,10 @@ public class GameManager : MonoBehaviour
         goal.goalTouched = false;
         timerPlay = false;
         fireUp = 0;
+        UIWin.SetActive(false);
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
         for (int i = 0; i < fires.Length; i++)
         {
