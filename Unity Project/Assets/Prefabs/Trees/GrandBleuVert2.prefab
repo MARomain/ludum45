@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 4990540588949866898}
   - component: {fileID: 4990540588952766898}
   - component: {fileID: 4990540588951767922}
-  - component: {fileID: 1051555663088569454}
   m_Layer: 0
   m_Name: Mesh1_Large_Oak_Dark_Model
   m_TagString: Untagged
@@ -111,17 +110,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &1051555663088569454
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4990540588949509554}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300000, guid: 8c6c7c16b3657434593e92af26aa1fff, type: 3}

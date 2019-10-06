@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviour
     {
         player.anyKey = false;
         timeLeft = timeMax;
+        timerText.text = timeLeft.ToString("F1");
         goal.goalTouched = false;
         timerPlay = false;
     }
