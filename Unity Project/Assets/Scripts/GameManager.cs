@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public bool timerPlay = false;
     public float timeLeft = 20f;
+    public float timeMax = 20f;
     public PlayerGameManagerCallBacks player;
     public Goal goal;
     public Transform startTransform;
@@ -14,7 +15,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        timeLeft = timeMax;
+
+        StartCoroutine(GameLoop());
     }
 
     // Update is called once per frame
@@ -23,7 +26,7 @@ public class GameManager : MonoBehaviour
         if(timerPlay == true)
         {
             timeLeft -= Time.deltaTime;
-            timerText.text = (timeLeft).ToString("1");
+            timerText.text = timeLeft.ToString("F1");
         }
     }
 
@@ -40,9 +43,12 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator GameStart()
     {
+        Debug.Log("GameStart");
+
+        ResetVariables();
+
         //reset la position du joueur
         player.transform.position = startTransform.position;
-        player.transform.rotation = startTransform.rotation;
 
         //DisableMovementInputs
 
@@ -55,6 +61,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator GamePlaying()
     {
+        Debug.Log("GamePlaying");
+
         //EnableMovementInputs
 
         //Lancement du timer
@@ -62,15 +70,21 @@ public class GameManager : MonoBehaviour
 
         while (goal.goalTouched == false)
         {
+            yield return null;
             if (timeLeft <= 0f)
-                yield return null;
+            {
+                timerPlay = false;
+                yield break;
+            }
         }
     }
 
     private IEnumerator DidYouWin()
     {
+        Debug.Log("DidYouWin?");
+
         //si le joueur a gagné
-        if(goal.goalTouched == true)
+        if (goal.goalTouched == true)
         {
             Debug.Log("YOU WON");
             yield return null; // peut être l'amener dans une autre coroutine "ecran de fin"
@@ -81,5 +95,13 @@ public class GameManager : MonoBehaviour
             yield return null; // a voir si y'a un certains nombre de try et après une défaite
         }
 
+    }
+
+    public void ResetVariables()
+    {
+        player.anyKey = false;
+        timeLeft = timeMax;
+        goal.goalTouched = false;
+        timerPlay = false;
     }
 }
