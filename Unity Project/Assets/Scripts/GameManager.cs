@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour
     public bool timerPlay = false;
     public float timeLeft = 20f;
     public float timeMax = 20f;
+    public LightFirePLace[] fires;
+    public int fireUp;
+    public int goalNumber = 6;
     public PlayerGameManagerCallBacks player;
     public Goal goal;
     public Transform startTransform;
@@ -68,7 +71,7 @@ public class GameManager : MonoBehaviour
         //Lancement du timer
         timerPlay = true;
 
-        while (goal.goalTouched == false)
+        while (fireUp < goalNumber)
         {
             yield return null;
             if (timeLeft <= 0f)
@@ -84,15 +87,23 @@ public class GameManager : MonoBehaviour
         Debug.Log("DidYouWin?");
 
         //si le joueur a gagné
-        if (goal.goalTouched == true)
+        if (fireUp >= goalNumber)
         {
             Debug.Log("YOU WON");
             yield return null; // peut être l'amener dans une autre coroutine "ecran de fin"
+
+            //écran de fin "YOU WON IN X SECOND
+            //bouton "press here to restart"
+            //bouton "press here to close"
         }
         else
         {
             Debug.Log("Start over again");
             yield return null; // a voir si y'a un certains nombre de try et après une défaite
+            
+            //écran "You have to light all the fire in less then a minute
+            //bouton "start over ?"
+            //bouton "quit"
         }
 
     }
@@ -104,5 +115,11 @@ public class GameManager : MonoBehaviour
         timerText.text = timeLeft.ToString("F1");
         goal.goalTouched = false;
         timerPlay = false;
+        fireUp = 0;
+
+        for (int i = 0; i < fires.Length; i++)
+        {
+            fires[i].lit = false;
+        }
     }
 }
